@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from autoslug import AutoSlugField
 from django.contrib.auth import get_user_model
+from ckeditor.fields import RichTextField
+
 
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -24,9 +26,11 @@ class Category(models.Model):
 class Post(models.Model):
     title = models.CharField(max_length=200)
     slug = AutoSlugField(populate_from='title')
-    overview = models.TextField()
+    thumbnail = models.ImageField(upload_to='', null=True, blank=True)
+    image_url = models.CharField(max_length=500, default=None, blank=True)
+    overview = RichTextField()
     date = models.DateTimeField(auto_now_add=True)
-    content = models.TextField()
+    content = RichTextField()
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     categories = models.ManyToManyField(Category)
     published = models.BooleanField()
